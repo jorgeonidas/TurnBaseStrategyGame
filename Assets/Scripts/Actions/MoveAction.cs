@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
+    public EventHandler OnStartMoving;
+    public EventHandler OnStoptMoving;
     [SerializeField] private int _maxMoveDistance = 4;
-    [SerializeField] Animator _unitAnimator;
     private Vector3 _targetPosition;
     private float _speed = 5f;
     private float _rotationSpeed = 10f;
@@ -29,11 +30,10 @@ public class MoveAction : BaseAction
         if (Vector3.Distance(transform.position, _targetPosition) > _reachDistance)
         {
             transform.position += moveDirection * _speed * Time.deltaTime;
-            _unitAnimator.SetBool("IsWalking", true);
         }
         else
         {
-            _unitAnimator.SetBool("IsWalking", false);
+            OnStoptMoving?.Invoke(this, EventArgs.Empty);
             ActionComplete();
         }
 
@@ -44,6 +44,7 @@ public class MoveAction : BaseAction
     {
         this._targetPosition = LevelGrid.Instance.GetWorldPosition(targetGridPosition);
         ActionStart(onActionComplete);
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
     }
 
 
