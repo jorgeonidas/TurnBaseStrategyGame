@@ -60,6 +60,11 @@ public class Unit : MonoBehaviour
         return _gridPosition;
     }
 
+    public Vector3 GetWorldPosition()
+    {
+        return transform.position;
+    }
+
     public BaseAction[] GetBaseActionArray()
     {
         return _baseActionArray;
@@ -95,5 +100,10 @@ public class Unit : MonoBehaviour
             _actionPoints = MAX_ACTION_POINTS;
             OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    public void Damage()
+    {
+        Debug.Log($"{transform} + damaged!");
     }
 }

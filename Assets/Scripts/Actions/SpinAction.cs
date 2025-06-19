@@ -17,16 +17,14 @@ public class SpinAction : BaseAction
         _totalSpinAmmount += spinAddAmmount;
         if (_totalSpinAmmount >= 360f)
         {
-            _isActive = false;
-            _onActionComplete?.Invoke();
+            ActionComplete();
         }
     }
 
-    public override void TakeAction(GridPosition gridPosition, Action onSpinComplete)
+    public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
         _totalSpinAmmount = 0;
-        _isActive = true;
-        _onActionComplete = onSpinComplete;
+        ActionStart(onActionComplete);
     }
 
     public override string GetActionName()

@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 288404505398407021}
   - component: {fileID: 9191259577642950697}
   - component: {fileID: 235446654357734117}
+  - component: {fileID: 1027474408477441921}
   - component: {fileID: 4072418703237512921}
   m_Layer: 7
   m_Name: Unit
@@ -146,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c04538db8d41b7147a6a9e297f3b7e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isEnemy: 0
 --- !u!114 &9191259577642950697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +172,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edea0c8388330204bb5c314d7894a4a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1027474408477441921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6649229685266773549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8398eb9b1c20ccf48826add1c3bcc834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!65 &4072418703237512921
