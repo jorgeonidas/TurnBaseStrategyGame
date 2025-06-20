@@ -6,7 +6,13 @@ using UnityEngine;
 
 public class ShootAction : BaseAction
 {
-    public EventHandler OnShoot;
+    public EventHandler<OnShootEventArgs> OnShoot;
+    //C# standard event args class for custom events
+    public class OnShootEventArgs : EventArgs
+    {
+        public Unit targetUnit;
+        public Unit shootingUnit;
+    }
     private enum States
     {
         Aiming,
@@ -15,7 +21,7 @@ public class ShootAction : BaseAction
     }
 
     private States _state;
-    private int _maxShootDistance = 5;
+    [SerializeField] int _maxShootDistance = 6;
     private float _stateTimer;
     private Unit _targetUnit;
     private bool _canShootBullet;
@@ -80,7 +86,11 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
-        OnShoot?.Invoke(this, EventArgs.Empty);
+        OnShoot?.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = _targetUnit,
+            shootingUnit = _unit
+        });
         _targetUnit.Damage();
     }
 

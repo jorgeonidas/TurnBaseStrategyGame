@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4677153405826551653
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7555872707171397636}
+  m_Layer: 7
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7555872707171397636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4677153405826551653}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.086, z: 0.739}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2868123410160557227}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5371684400047702261
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +193,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxMoveDistance: 2
-  _unitAnimator: {fileID: 5406628928799123706}
 --- !u!114 &235446654357734117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398eb9b1c20ccf48826add1c3bcc834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxShootDistance: 9
 --- !u!65 &4072418703237512921
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -221,6 +252,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 5406628928799123706}
+  _bulletProjectilePrefab: {fileID: 7914913678640220824, guid: 97a9df3581c8719478f2820a7f7dbe9b,
+    type: 3}
+  _shootPointTranform: {fileID: 7555872707171397636}
 --- !u!1001 &2872722403800813511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -308,7 +342,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 4d1c11ecf91c18d4e86d3818e8c650cc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4620998167008108, guid: c25ac4fdc903e7d49a7520930673ecd6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7555872707171397636}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25ac4fdc903e7d49a7520930673ecd6, type: 3}
 --- !u!4 &2868123410160557227 stripped
