@@ -151,4 +151,6 @@ public class ShootAction : BaseAction
     }
 
     public Unit GetTargetUnit() => _targetUnit;
+
+    public int GetMaxShootDistance() => _maxShootDistance;
 }

@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8398eb9b1c20ccf48826add1c3bcc834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxShootDistance: 9
+  _maxShootDistance: 7
 --- !u!65 &4072418703237512921
 BoxCollider:
   m_ObjectHideFlags: 0
