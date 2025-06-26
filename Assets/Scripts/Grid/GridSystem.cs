@@ -52,7 +52,7 @@ public class GridSystem<TGridObject>
             {
                 GridPosition gridPosition = new GridPosition(x, z);
                 Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
-                debugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition) as GridObject);
+                debugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition));
             }
         }
     }
