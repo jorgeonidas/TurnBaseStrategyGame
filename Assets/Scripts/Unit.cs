@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     GridPosition _gridPosition;
     MoveAction _moveAction;
     SpinAction _spinAction;
+    ShootAction _shootAction;
     private BaseAction[] _baseActionArray;
     private int _actionPoints = MAX_ACTION_POINTS;
     public bool IsEnemy => _isEnemy;
@@ -23,6 +24,7 @@ public class Unit : MonoBehaviour
         _spinAction = GetComponent<SpinAction>();
         _baseActionArray = GetComponents<BaseAction>();
         _healthSystem = GetComponent<HealthSystem>();
+        _shootAction = GetComponent<ShootAction>();
     }
 
     void Start()
@@ -78,6 +80,11 @@ public class Unit : MonoBehaviour
         return _baseActionArray;
     }
 
+    public ShootAction GetShootAction()
+    {
+        return _shootAction;
+    }
+
     public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
     {
         if (CanSpendActionPointsToTakeAction(baseAction))
@@ -113,6 +120,11 @@ public class Unit : MonoBehaviour
     public void Damage(int damageAmount)
     {
         _healthSystem.TakeDamage(damageAmount);
+    }
+
+    public float GetHealthNormalized()
+    {
+        return _healthSystem.GetHealthNormalized();
     }
 
     private void HealthSystem_OnDead(object sender, EventArgs e)

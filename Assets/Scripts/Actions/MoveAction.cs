@@ -91,4 +91,15 @@ public class MoveAction : BaseAction
     {
         return "Move";
     }
+
+    public override EnemyIAAction GetEnemyIAAction(GridPosition gridPosition)
+    {
+        //get amount of valid target in range from gridPosition, so its the best I'll move to it
+        int targetCountAtGridPosition = _unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+        return new EnemyIAAction
+        {
+            gridPosition = gridPosition,
+            actionValue = targetCountAtGridPosition * 10,
+        };
+    }
 }

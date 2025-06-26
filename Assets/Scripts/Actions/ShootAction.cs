@@ -97,8 +97,13 @@ public class ShootAction : BaseAction
 
     public override List<GridPosition> GetValidActionGridPositionList()
     {
+        GridPosition unitGridPositiom = _unit.GetGridPosition();
+        return GetValidActionGridPositionList(unitGridPositiom);
+    }
+
+    public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
+    {
         List<GridPosition> validGridPositionList = new List<GridPosition>();
-        GridPosition unitGridPosition = _unit.GetGridPosition();
         for (int x = -_maxShootDistance; x <= _maxShootDistance; x++)
         {
             for (int z = -_maxShootDistance; z <= _maxShootDistance; z++)
@@ -153,4 +158,20 @@ public class ShootAction : BaseAction
     public Unit GetTargetUnit() => _targetUnit;
 
     public int GetMaxShootDistance() => _maxShootDistance;
+
+    public override EnemyIAAction GetEnemyIAAction(GridPosition gridPosition)
+    {
+        Unit targetUnit = LevelGrid.Instance.GetUnitOnThisGridPosition(gridPosition);
+        return new EnemyIAAction
+        {
+            gridPosition = gridPosition,
+            actionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100), //lower the health better the score
+        };
+    }
+
+    //Valid position in shoot action contains cells with enemies to shoot at
+    public int GetTargetCountAtPosition(GridPosition gridPosition)
+    {
+        return GetValidActionGridPositionList(gridPosition).Count;
+    }
 }
