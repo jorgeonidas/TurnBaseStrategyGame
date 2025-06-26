@@ -95,7 +95,8 @@ public class MoveAction : BaseAction
     public override EnemyIAAction GetEnemyIAAction(GridPosition gridPosition)
     {
         //get amount of valid target in range from gridPosition, so its the best I'll move to it
-        int targetCountAtGridPosition = _unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+        ShootAction shootAction = _unit.GeatAction<ShootAction>();
+        int targetCountAtGridPosition = shootAction.GetTargetCountAtPosition(gridPosition);
         return new EnemyIAAction
         {
             gridPosition = gridPosition,

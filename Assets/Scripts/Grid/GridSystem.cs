@@ -1,30 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GridSystem
+public class GridSystem<TGridObject>
 {
     private int _width;
     private int _height;
     private float _cellSize;
-    private GridObject[,] _gridObjectsArray;
+    private TGridObject[,] _gridObjectsArray;
 
     // Constructor para inicializar el grid
     // width: ancho del grid en celdas en el eje X 
     // height: alto del grid en celdas en el eje Z
     // cellSize: tamaño de cada celda en unidades del mundo
-    public GridSystem(int width, int height, float cellSize)
+    // Constructor delegate for a TGridObject
+    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         _width = width;
         _height = height;
         _cellSize = cellSize;
-        _gridObjectsArray = new GridObject[width, height];
+        _gridObjectsArray = new TGridObject[width, height];
         for (int x = 0; x < _width; x++)
         {
             for (int z = 0; z < _height; z++)
             {
-                _gridObjectsArray[x, z] = new GridObject(this, new GridPosition(x, z));
+                _gridObjectsArray[x, z] = createGridObject(this, new GridPosition(x, z));
             }
         }
     }
@@ -50,12 +52,12 @@ public class GridSystem
             {
                 GridPosition gridPosition = new GridPosition(x, z);
                 Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
-                debugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition));
+                debugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition) as GridObject);
             }
         }
     }
     // Devuelve el objeto de la celda en la posición gridPosition
-    public GridObject GetGridObject(GridPosition gridPosition)
+    public TGridObject GetGridObject(GridPosition gridPosition)
     {
         return _gridObjectsArray[gridPosition.x, gridPosition.z];
     }

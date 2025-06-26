@@ -12,19 +12,13 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool _isEnemy;
     HealthSystem _healthSystem;
     GridPosition _gridPosition;
-    MoveAction _moveAction;
-    SpinAction _spinAction;
-    ShootAction _shootAction;
     private BaseAction[] _baseActionArray;
     private int _actionPoints = MAX_ACTION_POINTS;
     public bool IsEnemy => _isEnemy;
     void Awake()
     {
-        _moveAction = GetComponent<MoveAction>();
-        _spinAction = GetComponent<SpinAction>();
         _baseActionArray = GetComponents<BaseAction>();
         _healthSystem = GetComponent<HealthSystem>();
-        _shootAction = GetComponent<ShootAction>();
     }
 
     void Start()
@@ -54,16 +48,19 @@ public class Unit : MonoBehaviour
             LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
         }
     }
-    public MoveAction GetMoveAction()
-    {
-        return _moveAction;
-    }
 
-    public SpinAction GetSpinAction()
+    //Generic function to return a type of BaseAction
+    public T GeatAction<T>() where T : BaseAction
     {
-        return _spinAction;
+        foreach (BaseAction baseAction in _baseActionArray)
+        {
+            if (baseAction is T)
+            {
+                return (T)baseAction;
+            }
+        }
+        return null;
     }
-
 
     public GridPosition GetGridPosition()
     {
@@ -78,11 +75,6 @@ public class Unit : MonoBehaviour
     public BaseAction[] GetBaseActionArray()
     {
         return _baseActionArray;
-    }
-
-    public ShootAction GetShootAction()
-    {
-        return _shootAction;
     }
 
     public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
