@@ -9,6 +9,7 @@ public class Pathfinding : MonoBehaviour
     private const int MOVE_STRAIGHT_COST     = 10;
     private const int MOVE_DIAGONAL_COST = 14;
     [SerializeField] Transform _gridDebugObjectPrefab;
+    [SerializeField] private LayerMask _obstaclesLayerMask;
     private int _width;
     private int _height;
     private float _cellSize;
@@ -23,11 +24,34 @@ public class Pathfinding : MonoBehaviour
             return;
         }
         Instance = this;
-        _gridSystem = new GridSystem<PathNode>(10, 10, 2, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
-        _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
+
     }
 
-   public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+    public void Setup(int width, int height, float cellSize)
+    {
+        _width = width;
+        _height = height;
+        _cellSize = cellSize;
+        _gridSystem = new GridSystem<PathNode>(_width, _height, _cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+        _gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int z = 0; z < _height; z++)
+            {
+                GridPosition gridPosition = new GridPosition(x, z);
+                Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+                float rcOffsetDistance = 5f;
+                //o podemos usar la opcion  de Quering from backfaces en physics settings
+                if (Physics.Raycast(worldPosition + Vector3.down * rcOffsetDistance, Vector3.up, rcOffsetDistance * 2, _obstaclesLayerMask))
+                {
+                    GetNode(x, z).SetIsWalkable(false);
+                }
+            }
+        }
+    }
+
+    public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
     {
         List<PathNode> openList = new List<PathNode>();
         List<PathNode> closedList = new List<PathNode>();
@@ -69,14 +93,22 @@ public class Pathfinding : MonoBehaviour
 
             foreach (PathNode neighbourNode in GetNeighbourList(currentNode))
             {
+                //node already checked
                 if (closedList.Contains(neighbourNode))
                 {
                     continue;
                 }
 
-                int tentativeGCost = 
-                    currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
+                //skip unwalkable nodess
+                if (!neighbourNode.IsWalkable())
+                {
+                    closedList.Add(neighbourNode);
+                    continue;
+                }
 
+                int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
+
+                //found a cheaper node add to openList
                 if (tentativeGCost < neighbourNode.GetGCost())
                 {
                     neighbourNode.SetCameFromPathNode(currentNode);
