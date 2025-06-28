@@ -22,4 +22,31 @@ public class PathNode
     public int GetGCost() => _gCost;
     public int GetHCost() => _hCost;
     public int GetFCost() => _fCost;
+    public GridPosition GetGridPosition() => _gridPosition;
+    public PathNode GetCameFromPathNode() => _cameFromPathNode;
+
+    public void SetGCost(int cost)
+    {
+        _gCost = cost;
+    }
+
+    public void SetHCost(int cost)
+    {
+        _hCost = cost;
+    }
+
+    public void CalculateFCost()
+    {
+        _fCost = _gCost + _hCost;
+    }
+
+    public void ResetCameFromPathNode()
+    {
+        _cameFromPathNode = null;
+    }
+
+    public void SetCameFromPathNode(PathNode pathNode)
+    {
+        _cameFromPathNode = pathNode;
+    }
 }
