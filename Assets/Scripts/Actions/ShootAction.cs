@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ShootAction : BaseAction
 {
+    public static EventHandler<OnShootEventArgs> OnAnyShoot;
     public EventHandler<OnShootEventArgs> OnShoot;
     //C# standard event args class for custom events
     public class OnShootEventArgs : EventArgs
@@ -88,6 +89,11 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
+        OnAnyShoot?.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = _targetUnit,
+            shootingUnit = _unit
+        });
         OnShoot?.Invoke(this, new OnShootEventArgs
         {
             targetUnit = _targetUnit,

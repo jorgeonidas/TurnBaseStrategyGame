@@ -24,7 +24,6 @@ public class Pathfinding : MonoBehaviour
             return;
         }
         Instance = this;
-
     }
 
     public void Setup(int width, int height, float cellSize)
