@@ -8,7 +8,7 @@ public class LevelGrid : MonoBehaviour
     public static LevelGrid Instance { get; private set; }
     public event EventHandler OnAnyUnitMovedGridPosition;
     [SerializeField] private Transform _debugPrefab;
-    
+
     [SerializeField] private int _width = 10;
     [SerializeField] private int _height = 10;
     [SerializeField] private float _cellSize = 2;
@@ -68,11 +68,22 @@ public class LevelGrid : MonoBehaviour
         GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
         return gridObject.HasAnyUnit();
     }
-    
+
     public Unit GetUnitOnThisGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
         return gridObject.GetUnit();
     }
 
+    public Door GetDoorAtGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
+        return gridObject.GetDoor();
+    }
+
+    public void SetDoorAtGridPosition(GridPosition gridPosition, Door door)
+    {
+        GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
+        gridObject.SetDoor(door);
+    }
 }
