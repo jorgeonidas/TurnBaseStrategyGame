@@ -37,6 +37,10 @@ public class GrenadeProjectile : MonoBehaviour
                 {
                     targetUnit.Damage(_damage);
                 }
+                if (col.TryGetComponent<DestructibleCrate>(out DestructibleCrate crate))
+                {
+                    crate.Damage();
+                }
             }
             OnAnyGrenadeExploded?.Invoke(this, EventArgs.Empty);
             Instantiate(_grenadeExplodeVfxPrefab, _targetPosition + Vector3.up * 1f, Quaternion.identity);
