@@ -11,12 +11,10 @@ public class Door : MonoBehaviour
     [SerializeField] private bool _isOpen;
     [SerializeField] private Transform _doorLeft;
     [SerializeField] private Transform _doorRigth;
-
+    [SerializeField] private float _doorSequenceDuration = 1f;
     Sequence _doorSequence;
-
-    private void Awake()
-    {
-    }
+    float _openScale = 0.1f;
+    float _closedScale = 1f;
     private void Start()
     {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
@@ -30,14 +28,14 @@ public class Door : MonoBehaviour
         Vector3 doorRScale = _doorRigth.localScale;
         if (_isOpen)
         {
-            doorLScale.x = 0.1f;
-            doorRScale.x = -0.1f;
+            doorLScale.x = _openScale;
+            doorRScale.x = -_openScale;
 
         }
         else
         {
-            doorLScale.x = 1f;
-            doorRScale.x = -1f;
+            doorLScale.x = _closedScale;
+            doorRScale.x = -_closedScale;
         }
         _doorLeft.localScale = doorLScale;
         _doorRigth.localScale = doorRScale;
@@ -65,7 +63,7 @@ public class Door : MonoBehaviour
         }
 
         _doorSequence = DOTween.Sequence();
-        _doorSequence.Append(_doorLeft.DOScaleX(0.1f, 1f)).Join(_doorRigth.DOScaleX(-0.1f, 1f)).OnComplete(() =>
+        _doorSequence.Append(_doorLeft.DOScaleX(_openScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_openScale, _doorSequenceDuration)).OnComplete(() =>
         {
             SetDoorPositionWalkable(_isOpen);
             _onInteractCompleted?.Invoke();
@@ -81,7 +79,7 @@ public class Door : MonoBehaviour
         }
 
         _doorSequence = DOTween.Sequence();
-        _doorSequence.Append(_doorLeft.DOScaleX(1f, 1f)).Join(_doorRigth.DOScaleX(-1f, 1f)).OnComplete(() =>
+        _doorSequence.Append(_doorLeft.DOScaleX(_closedScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_closedScale, _doorSequenceDuration)).OnComplete(() =>
         {
             SetDoorPositionWalkable(_isOpen);
             _onInteractCompleted?.Invoke();
