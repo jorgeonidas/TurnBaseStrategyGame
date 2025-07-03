@@ -1,10 +1,13 @@
+#define USE_NEW_INPUT_SYSTEM
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
+    private PlayerInputActions _playerInputActions;
     private void Awake()
     {
         if (Instance != null)
@@ -14,19 +17,33 @@ public class InputManager : MonoBehaviour
             return;
         }
         Instance = this;
+        _playerInputActions = new PlayerInputActions();
+        _playerInputActions.Player.Enable();
     }
     public Vector2 GetMouseScreenPosition()
     {
+#if USE_NEW_INPUT_SYSTEM
+        return Mouse.current.position.ReadValue();
+#else
         return Input.mousePosition;
+#endif
     }
 
-    public bool IsMouseButtonDown()
+    public bool IsMouseButtonDownThisFrame()
     {
+#if USE_NEW_INPUT_SYSTEM
+        return _playerInputActions.Player.Click.WasPressedThisFrame();
+#else
         return Input.GetMouseButtonDown(0);
+#endif
     }
 
     public Vector2 GetCameraMoveVector()
     {
+#if USE_NEW_INPUT_SYSTEM
+//mapped in PlayerInputActions asset
+        return _playerInputActions.Player.CameraMovement.ReadValue<Vector2>();
+#else
         Vector2 inputMoveDir = Vector2.zero;
         if (Input.GetKey(KeyCode.W))
         {
@@ -45,10 +62,14 @@ public class InputManager : MonoBehaviour
             inputMoveDir.x = -1;
         }
         return inputMoveDir;
+#endif
     }
 
     public float GetCameraRotateAmount()
     {
+#if USE_NEW_INPUT_SYSTEM
+      return  _playerInputActions.Player.CameraRotate.ReadValue<float>();
+#else
         float rotateAmount = 0f;
         if (Input.GetKey(KeyCode.Q))
         {
@@ -59,10 +80,14 @@ public class InputManager : MonoBehaviour
             rotateAmount = -1f;
         }
         return rotateAmount;
+#endif
     }
 
     public float GetCameraZoomAmount()
     {
+#if USE_NEW_INPUT_SYSTEM
+        return _playerInputActions.Player.CameraZoom.ReadValue<float>();
+#else
         float zoomAmount = 0f;
         if (Input.mouseScrollDelta.y > 0)
         {
@@ -73,5 +98,6 @@ public class InputManager : MonoBehaviour
             zoomAmount = +1f;
         }
         return zoomAmount;
+#endif
     }
 }

@@ -37,6 +37,7 @@ public class Door : MonoBehaviour, IInteractable
         }
         _doorLeft.localScale = doorLScale;
         _doorRigth.localScale = doorRScale;
+        SetDoorPositionWalkable(_isOpen);
     }
 
     public void Intearact(Action onInteractionCompleted)
