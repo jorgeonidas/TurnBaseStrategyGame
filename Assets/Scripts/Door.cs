@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IInteractable
 {
     private GridPosition _gridPosition;
-    private Action _onInteractCompleted;
+    private Action _onInteractionCompleted;
     [SerializeField] private bool _isOpen;
     [SerializeField] private Transform _doorLeft;
     [SerializeField] private Transform _doorRigth;
@@ -18,7 +16,7 @@ public class Door : MonoBehaviour
     private void Start()
     {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-        LevelGrid.Instance.SetDoorAtGridPosition(_gridPosition, this);
+        LevelGrid.Instance.SetInteractableAtGridPosition(_gridPosition, this);
         DoorSetup();
     }
 
@@ -41,9 +39,9 @@ public class Door : MonoBehaviour
         _doorRigth.localScale = doorRScale;
     }
 
-    public void Intearact(Action onInteractCompleted)
+    public void Intearact(Action onInteractionCompleted)
     {
-        _onInteractCompleted = onInteractCompleted;
+        _onInteractionCompleted = onInteractionCompleted;
         if (!_isOpen)
         {
             OpenDoor();
@@ -66,7 +64,7 @@ public class Door : MonoBehaviour
         _doorSequence.Append(_doorLeft.DOScaleX(_openScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_openScale, _doorSequenceDuration)).OnComplete(() =>
         {
             SetDoorPositionWalkable(_isOpen);
-            _onInteractCompleted?.Invoke();
+            _onInteractionCompleted?.Invoke();
         });
     }
 
@@ -82,7 +80,7 @@ public class Door : MonoBehaviour
         _doorSequence.Append(_doorLeft.DOScaleX(_closedScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_closedScale, _doorSequenceDuration)).OnComplete(() =>
         {
             SetDoorPositionWalkable(_isOpen);
-            _onInteractCompleted?.Invoke();
+            _onInteractionCompleted?.Invoke();
         });
     }
 
