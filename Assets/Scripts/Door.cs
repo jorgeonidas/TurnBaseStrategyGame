@@ -4,19 +4,22 @@ using DG.Tweening;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    private GridPosition _gridPosition;
     private Action _onInteractionCompleted;
     [SerializeField] private bool _isOpen;
     [SerializeField] private Transform _doorLeft;
     [SerializeField] private Transform _doorRigth;
     [SerializeField] private float _doorSequenceDuration = 1f;
+    private BoxCollider _doorColider;
     Sequence _doorSequence;
     float _openScale = 0.1f;
     float _closedScale = 1f;
+    private void Awake()
+    {
+        _doorColider = GetComponent<BoxCollider>();//disble this collider when door is open
+    }
     private void Start()
     {
-        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-        LevelGrid.Instance.SetInteractableAtGridPosition(_gridPosition, this);
+        LevelGrid.Instance.SetInteractableInsideColliderBounds(_doorColider, this);
         DoorSetup();
     }
 
@@ -37,7 +40,7 @@ public class Door : MonoBehaviour, IInteractable
         }
         _doorLeft.localScale = doorLScale;
         _doorRigth.localScale = doorRScale;
-        SetDoorPositionWalkable(_isOpen);
+        SetDoorAreaWalkable(_isOpen);
     }
 
     public void Intearact(Action onInteractionCompleted)
@@ -64,7 +67,7 @@ public class Door : MonoBehaviour, IInteractable
         _doorSequence = DOTween.Sequence();
         _doorSequence.Append(_doorLeft.DOScaleX(_openScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_openScale, _doorSequenceDuration)).OnComplete(() =>
         {
-            SetDoorPositionWalkable(_isOpen);
+            SetDoorAreaWalkable(_isOpen);
             _onInteractionCompleted?.Invoke();
         });
     }
@@ -80,13 +83,13 @@ public class Door : MonoBehaviour, IInteractable
         _doorSequence = DOTween.Sequence();
         _doorSequence.Append(_doorLeft.DOScaleX(_closedScale, _doorSequenceDuration)).Join(_doorRigth.DOScaleX(-_closedScale, _doorSequenceDuration)).OnComplete(() =>
         {
-            SetDoorPositionWalkable(_isOpen);
+            SetDoorAreaWalkable(_isOpen);
             _onInteractionCompleted?.Invoke();
         });
     }
 
-    private void SetDoorPositionWalkable(bool isOpen)
+    private void SetDoorAreaWalkable(bool isOpen)
     {
-        Pathfinding.Instance.SetIsWalkableGridPosition(_gridPosition, _isOpen);
+        Pathfinding.Instance.SetIsWalkableInsideColliderBounds(_doorColider, isOpen);
     }
 }

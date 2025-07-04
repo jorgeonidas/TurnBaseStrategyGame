@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: a destructible class or interface to break walls for example
 public class DestructibleCrate : MonoBehaviour
 {
     [SerializeField] private Transform _crateDesstroyed;

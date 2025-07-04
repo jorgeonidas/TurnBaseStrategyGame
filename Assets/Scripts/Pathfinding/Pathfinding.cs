@@ -235,7 +235,22 @@ public class Pathfinding : MonoBehaviour
     {
         _gridSystem.GetGridObject(gridPosition).SetIsWalkable(isWalkable);
     }
-    
+
+    public void SetIsWalkableInsideColliderBounds(BoxCollider _boxCollider, bool isWalkable)
+    {
+        Vector3 max = _boxCollider.bounds.max;
+        Vector3 min = _boxCollider.bounds.min;
+        GridPosition maxGrid = LevelGrid.Instance.GetGridPosition(new Vector3(max.x, 0, max.z));
+        GridPosition minGrid = LevelGrid.Instance.GetGridPosition(new Vector3(min.x, 0, min.z));
+        for (int x = minGrid.x; x <= maxGrid.x; x++)
+        {
+            for (int z = minGrid.z; z <= maxGrid.z; z++)
+            {
+                Pathfinding.Instance.SetIsWalkableGridPosition(new GridPosition(x, z), isWalkable);
+            }
+        }
+    }
+
     public bool IsWalkableGridPosition(GridPosition gridPosition)
     {
         return _gridSystem.GetGridObject(gridPosition).IsWalkable();

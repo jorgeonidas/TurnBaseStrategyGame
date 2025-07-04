@@ -86,4 +86,19 @@ public class LevelGrid : MonoBehaviour
         GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
         gridObject.SetInteractable(interactable);
     }
+
+    public void SetInteractableInsideColliderBounds(BoxCollider boxCollider, IInteractable interactable)
+    {
+        Vector3 max = boxCollider.bounds.max;
+        Vector3 min = boxCollider.bounds.min;
+        GridPosition maxGrid = LevelGrid.Instance.GetGridPosition(new Vector3(max.x, 0, max.z));
+        GridPosition minGrid = LevelGrid.Instance.GetGridPosition(new Vector3(min.x, 0, min.z));
+        for (int x = minGrid.x; x <= maxGrid.x; x++)
+        {
+            for (int z = minGrid.z; z <= maxGrid.z; z++)
+            {
+                SetInteractableAtGridPosition(new GridPosition(x, z), interactable);
+            }
+        }
+    }
 }
