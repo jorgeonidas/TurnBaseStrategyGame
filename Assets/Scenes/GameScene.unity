@@ -4354,12 +4354,12 @@ PrefabInstance:
     - target: {fileID: 6546164132772561844, guid: a91802dd6322bab47a442ed0f34e8c7d,
         type: 3}
       propertyPath: m_Name
-      value: DoorX3
+      value: DoorX2
       objectReference: {fileID: 0}
     - target: {fileID: 6546164132772561844, guid: a91802dd6322bab47a442ed0f34e8c7d,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7321547458074183011, guid: a91802dd6322bab47a442ed0f34e8c7d,
         type: 3}
@@ -12971,7 +12971,7 @@ PrefabInstance:
     - target: {fileID: 6546164132772561844, guid: a91802dd6322bab47a442ed0f34e8c7d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7321547458074183011, guid: a91802dd6322bab47a442ed0f34e8c7d,
         type: 3}

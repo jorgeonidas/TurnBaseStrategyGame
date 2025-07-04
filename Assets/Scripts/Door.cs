@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class Door : MonoBehaviour, IInteractable
 {
@@ -9,6 +10,7 @@ public class Door : MonoBehaviour, IInteractable
     [SerializeField] private Transform _doorLeft;
     [SerializeField] private Transform _doorRigth;
     [SerializeField] private float _doorSequenceDuration = 1f;
+    private List<GridPosition> _doorGridPositions;
     private BoxCollider _doorColider;
     Sequence _doorSequence;
     float _openScale = 0.1f;
@@ -19,8 +21,34 @@ public class Door : MonoBehaviour, IInteractable
     }
     private void Start()
     {
-        LevelGrid.Instance.SetInteractableInsideColliderBounds(_doorColider, this);
+        SetGridPositions();
+        SetInteractablePositions();
         DoorSetup();
+    }
+
+    private void SetInteractablePositions()
+    {
+        for (int i = 0; i < _doorGridPositions.Count; i++)
+        {
+            LevelGrid.Instance.SetInteractableAtGridPosition(_doorGridPositions[i], this);
+        }
+    }
+
+    private void SetGridPositions()
+    {
+        _doorGridPositions = new List<GridPosition>();
+        //setup grid positions, these grid positions will be use for set interactivity and walkability
+        Vector3 max = _doorColider.bounds.max;
+        Vector3 min = _doorColider.bounds.min;
+        GridPosition maxGrid = LevelGrid.Instance.GetGridPosition(new Vector3(max.x, 0, max.z));
+        GridPosition minGrid = LevelGrid.Instance.GetGridPosition(new Vector3(min.x, 0, min.z));
+        for (int x = minGrid.x; x <= maxGrid.x; x++)
+        {
+            for (int z = minGrid.z; z <= maxGrid.z; z++)
+            {
+                _doorGridPositions.Add(new GridPosition(x, z));
+            }
+        }
     }
 
     private void DoorSetup()
@@ -90,6 +118,10 @@ public class Door : MonoBehaviour, IInteractable
 
     private void SetDoorAreaWalkable(bool isOpen)
     {
-        Pathfinding.Instance.SetIsWalkableInsideColliderBounds(_doorColider, isOpen);
+        _doorColider.enabled = !isOpen;
+        for (int i = 0; i < _doorGridPositions.Count; i++)
+        {
+            Pathfinding.Instance.SetIsWalkableGridPosition(_doorGridPositions[i], isOpen);
+        }
     }
 }
