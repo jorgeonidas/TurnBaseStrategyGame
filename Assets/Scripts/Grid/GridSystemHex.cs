@@ -49,7 +49,37 @@ public class GridSystemHex<TGridObject>
     //coordenada en el grid 
     public GridPosition GetGridPosition(Vector3 worldPosition)
     {
-        return new GridPosition(Mathf.RoundToInt(worldPosition.x / _cellSize), Mathf.RoundToInt(worldPosition.z / _cellSize));
+        GridPosition roughXZ = new GridPosition(
+            Mathf.RoundToInt(worldPosition.x / _cellSize),
+            Mathf.RoundToInt(worldPosition.z / _cellSize / HEX_VERTICAL_OFFSET_MULTIPLIER)
+        );
+        bool oddRow = roughXZ.z % 2 != 0;
+        List<GridPosition> neighbourGridPositionList = new List<GridPosition>
+        {
+            //left and rigth
+            roughXZ + new GridPosition(-1, 0),
+            roughXZ + new GridPosition(+1, 0),
+            //Up and down
+            roughXZ + new GridPosition(0, +1),
+            roughXZ + new GridPosition(0, -1),
+
+            //diagonal, if odd we grab rigth neigborns else we grab left neighborns
+            roughXZ + new GridPosition(oddRow ? +1 : -1, +1),
+            roughXZ + new GridPosition(oddRow ? +1 : -1, -1),
+        };
+
+        //find which one is the closest
+        GridPosition closestGridPosition = roughXZ;
+        foreach (GridPosition neighbourGridPosition in neighbourGridPositionList)
+        {
+            if (Vector3.Distance(worldPosition, GetWorldPosition(neighbourGridPosition)) <
+            Vector3.Distance(worldPosition, GetWorldPosition(closestGridPosition)))
+            {
+                closestGridPosition = neighbourGridPosition;
+            }
+        }
+
+        return closestGridPosition;
     }
 
     public void CreateDebugObjects(Transform debugPrefab)
