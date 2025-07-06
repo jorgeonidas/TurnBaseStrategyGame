@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GridSystem<TGridObject>
+public class GridSystemHex<TGridObject>
 {
+    private const float HEX_VERTICAL_OFFSET_MULTIPLIER = 0.75f;
     private int _width;
     private int _height;
     private float _cellSize;
@@ -16,7 +17,7 @@ public class GridSystem<TGridObject>
     // height: alto del grid en celdas en el eje Z
     // cellSize: tamaño de cada celda en unidades del mundo
     // Constructor delegate for a TGridObject
-    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystemHex(int width, int height, float cellSize, Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         _width = width;
         _height = height;
@@ -34,8 +35,15 @@ public class GridSystem<TGridObject>
     //coordenada en el mundo
     public Vector3 GetWorldPosition(GridPosition gridPosition)
     {
-        //multiplicado por la dimension de la celda
-        return new Vector3(gridPosition.x, 0, gridPosition.z) * _cellSize;
+        //chequear si la fila es impar para aplicar offset en X (mitad del tamaño de la celda)
+        Vector3 horizontalOffset = Vector3.zero;
+        if (gridPosition.z % 2 != 0)
+        {
+            horizontalOffset = new Vector3(1, 0, 0) * _cellSize * 0.5f;
+        }
+        return new Vector3(gridPosition.x, 0, 0) * _cellSize 
+        //Cada Z se posiciona al 75% del total del tamaño de la celda
+                + new Vector3(0, 0, gridPosition.z) * _cellSize * HEX_VERTICAL_OFFSET_MULTIPLIER + horizontalOffset;
     }
 
     //coordenada en el grid 

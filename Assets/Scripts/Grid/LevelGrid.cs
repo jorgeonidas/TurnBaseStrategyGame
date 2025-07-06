@@ -12,7 +12,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int _width = 10;
     [SerializeField] private int _height = 10;
     [SerializeField] private float _cellSize = 2;
-    private GridSystem<GridObject> _gridSystem;
+    private GridSystemHex<GridObject> _gridSystem;
     void Awake()
     {
         if (Instance != null)
@@ -22,7 +22,7 @@ public class LevelGrid : MonoBehaviour
             return;
         }
         Instance = this;
-        _gridSystem = new GridSystem<GridObject>(_width, _height, _cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        _gridSystem = new GridSystemHex<GridObject>(_width, _height, _cellSize, (GridSystemHex<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
     }
 
     private void Start()
