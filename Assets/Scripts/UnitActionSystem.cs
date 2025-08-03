@@ -61,7 +61,7 @@ public class UnitActionSystem : MonoBehaviour
     {
         if (InputManager.Instance.IsMouseButtonDownThisFrame())
         {
-            GridPosition mouseGridposition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+            GridPosition mouseGridposition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPositionOnlyHitVisible());
             if (!_selectedAction.IsValidActionGridPosition(mouseGridposition))
             {
                 return;
