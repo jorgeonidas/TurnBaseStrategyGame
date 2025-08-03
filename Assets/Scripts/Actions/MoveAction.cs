@@ -65,45 +65,48 @@ public class MoveAction : BaseAction
         {
             for (int z = -_maxMoveDistance; z <= _maxMoveDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z, 0);//Offset en el mismo piso
-                GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-
-                //check if inside grid bounds
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                for (int floor = -_maxMoveDistance; floor <= _maxMoveDistance; floor++)
                 {
-                    continue;
-                }
+                    GridPosition offsetGridPosition = new GridPosition(x, z, floor);
+                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
-                if (testGridPosition == unitGridPosition)
-                {
-                    //same grid position where the unit is already at
-                    continue;
-                }
+                    //check if inside grid bounds
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
 
-                if (LevelGrid.Instance.HasAnyUnitOnThisGridPosition(testGridPosition))
-                {
-                    //Grid position already occupy by another unit
-                    continue;
-                }
+                    if (testGridPosition == unitGridPosition)
+                    {
+                        //same grid position where the unit is already at
+                        continue;
+                    }
 
-                if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPosition))
-                {
-                    continue;
-                }
+                    if (LevelGrid.Instance.HasAnyUnitOnThisGridPosition(testGridPosition))
+                    {
+                        //Grid position already occupy by another unit
+                        continue;
+                    }
 
-                if (!Pathfinding.Instance.HasPath(unitGridPosition, testGridPosition))
-                {
-                    continue;
-                }
+                    if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
 
-                //too far than valid length, paht distance is too long
-                int pathfindinfDistanceMultiplier = 10;
-                if (Pathfinding.Instance.GetPathLength(unitGridPosition, testGridPosition) > _maxMoveDistance * pathfindinfDistanceMultiplier)
-                {
-                    continue;
-                }
+                    if (!Pathfinding.Instance.HasPath(unitGridPosition, testGridPosition))
+                    {
+                        continue;
+                    }
 
-                validGridPositionList.Add(testGridPosition);
+                    //too far than valid length, paht distance is too long
+                    int pathfindinfDistanceMultiplier = 10;
+                    if (Pathfinding.Instance.GetPathLength(unitGridPosition, testGridPosition) > _maxMoveDistance * pathfindinfDistanceMultiplier)
+                    {
+                        continue;
+                    }
+
+                    validGridPositionList.Add(testGridPosition);
+                }
             }
         }
 
