@@ -35,7 +35,7 @@ public class InteractAction : BaseAction
         {
             for (int z = -_maxInteractDistance; z <= _maxInteractDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
                 //check if inside grid bounds

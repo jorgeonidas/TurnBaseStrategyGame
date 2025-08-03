@@ -36,7 +36,7 @@ public class GrenadeAction : BaseAction
         {
             for (int z = -_maxThrowDistance; z <= _maxThrowDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
                 //check if inside grid bounds

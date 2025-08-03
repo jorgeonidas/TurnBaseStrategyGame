@@ -31,14 +31,15 @@ public class Pathfinding : MonoBehaviour
         _width = width;
         _height = height;
         _cellSize = cellSize;
-        _gridSystem = new GridSystem<PathNode>(_width, _height, _cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+        _gridSystem = new GridSystem<PathNode>(_width, _height, _cellSize, 0, LevelGrid.FLOOR_HEIGTH,
+        (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
         //_gridSystem.CreateDebugObjects(_gridDebugObjectPrefab);
 
         for (int x = 0; x < _width; x++)
         {
             for (int z = 0; z < _height; z++)
             {
-                GridPosition gridPosition = new GridPosition(x, z);
+                GridPosition gridPosition = new GridPosition(x, z, 0);
                 Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
                 float rcOffsetDistance = 5f;
                 //o podemos usar la opcion  de Quering from backfaces en physics settings
@@ -63,7 +64,7 @@ public class Pathfinding : MonoBehaviour
         {
             for (int z = 0; z < _gridSystem.GetHeight(); z++)
             {
-                GridPosition gridPosition = new GridPosition(x, z);
+                GridPosition gridPosition = new GridPosition(x, z, 0);
                 PathNode pathNode = _gridSystem.GetGridObject(gridPosition);
 
                 pathNode.SetGCost(int.MaxValue);
@@ -153,7 +154,7 @@ public class Pathfinding : MonoBehaviour
 
     private PathNode GetNode(int x, int z)
     {
-        return _gridSystem.GetGridObject(new GridPosition(x, z));
+        return _gridSystem.GetGridObject(new GridPosition(x, z, 0));
     }
 
     private List<PathNode> GetNeighbourList(PathNode currentNode)
@@ -246,7 +247,8 @@ public class Pathfinding : MonoBehaviour
         {
             for (int z = minGrid.z; z <= maxGrid.z; z++)
             {
-                Pathfinding.Instance.SetIsWalkableGridPosition(new GridPosition(x, z), isWalkable);
+                //todo get the floor where the collider it is
+                Pathfinding.Instance.SetIsWalkableGridPosition(new GridPosition(x, z, 0), isWalkable);
             }
         }
     }

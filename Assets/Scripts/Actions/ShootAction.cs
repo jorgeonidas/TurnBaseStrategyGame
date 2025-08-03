@@ -116,7 +116,7 @@ public class ShootAction : BaseAction
         {
             for (int z = -_maxShootDistance; z <= _maxShootDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
                 //check if inside grid bounds

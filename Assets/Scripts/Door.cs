@@ -46,7 +46,7 @@ public class Door : MonoBehaviour, IInteractable
         {
             for (int z = minGrid.z; z <= maxGrid.z; z++)
             {
-                _doorGridPositions.Add(new GridPosition(x, z));
+                _doorGridPositions.Add(new GridPosition(x, z, 0));//TODO obener el piso donde esta ubicada la puerta
             }
         }
     }

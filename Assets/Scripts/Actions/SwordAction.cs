@@ -84,7 +84,7 @@ public class SwordAction : BaseAction
         {
             for (int z = -_maxSwordDistance; z <= _maxSwordDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
                 //check if inside grid bounds

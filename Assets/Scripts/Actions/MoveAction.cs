@@ -65,7 +65,7 @@ public class MoveAction : BaseAction
         {
             for (int z = -_maxMoveDistance; z <= _maxMoveDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition offsetGridPosition = new GridPosition(x, z, 0);//Offset en el mismo piso
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
 
                 //check if inside grid bounds
