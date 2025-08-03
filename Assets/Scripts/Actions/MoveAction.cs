@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
+    
+    public EventHandler<OnChangeFloorStartedEventArgs> OnChangedFloorStarted;
+    public class OnChangeFloorStartedEventArgs : EventArgs
+    {
+        public GridPosition unitGridPosition;
+        public GridPosition targetGridPosition;
+    }
     public EventHandler OnStartMoving;
     public EventHandler OnStoptMoving;
     [SerializeField] private int _maxMoveDistance = 4;
@@ -13,6 +20,10 @@ public class MoveAction : BaseAction
     private float _speed = 5f;
     private float _rotationSpeed = 10f;
     private float _reachDistance = 0.1f;
+    private bool _isChangingFloors;
+    private float _differentFloorsTeleportTimer;
+    private float _differentFloorsTeleportTimerMax = 0.5f;
+
 
     void Update()
     {
@@ -22,19 +33,54 @@ public class MoveAction : BaseAction
         }
 
         Vector3 targetPosition = _positionList[_currentPositionIndex];
-        Vector3 moveDirection = (targetPosition - transform.position).normalized;
-        transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * _rotationSpeed);
-        if (Vector3.Distance(transform.position, targetPosition) > _reachDistance)
+        if (_isChangingFloors)
         {
-            transform.position += moveDirection * _speed * Time.deltaTime;
+            Vector3 targetSameFloorPosition = targetPosition;
+            targetSameFloorPosition.y = transform.position.y;
+            Vector3 rotateDirection = (targetSameFloorPosition - transform.position).normalized;
+            transform.forward = Vector3.Slerp(transform.forward, rotateDirection, Time.deltaTime * _rotationSpeed);
+            //Stop and telepor logic
+            _differentFloorsTeleportTimer -= Time.deltaTime;
+            if (_differentFloorsTeleportTimer < 0)
+            {
+                _isChangingFloors = false;
+                transform.position = targetPosition;    
+            }
         }
         else
+        {
+            //Regular move logic
+            Vector3 moveDirection = (targetPosition - transform.position).normalized;
+            transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * _rotationSpeed);
+            transform.position += moveDirection * _speed * Time.deltaTime;
+        }
+
+        if (Vector3.Distance(transform.position, targetPosition) < _reachDistance)
         {
             _currentPositionIndex++;
             if (_currentPositionIndex >= _positionList.Count)
             {
                 OnStoptMoving?.Invoke(this, EventArgs.Empty);
                 ActionComplete();
+            }
+            else
+            {
+                targetPosition = _positionList[_currentPositionIndex];
+                GridPosition targetGridPosition = LevelGrid.Instance.GetGridPosition(targetPosition);
+                GridPosition unitGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+
+                if (targetGridPosition.floor != unitGridPosition.floor)
+                {
+                    //Different floors
+                    //will jump or drop in the next frame
+                    _isChangingFloors = true;
+                    _differentFloorsTeleportTimer = _differentFloorsTeleportTimerMax;
+                    OnChangedFloorStarted?.Invoke(this, new OnChangeFloorStartedEventArgs()
+                    {
+                        targetGridPosition = targetGridPosition,
+                        unitGridPosition = unitGridPosition
+                    });
+                }
             }
         }
     }

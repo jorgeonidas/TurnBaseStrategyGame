@@ -18,6 +18,7 @@ public class UnitAnimator : MonoBehaviour
         {
             moveAction.OnStartMoving += MoveAction_OnStartMoving;
             moveAction.OnStoptMoving += MoveAction_OnStoptMoving;
+            moveAction.OnChangedFloorStarted += MoveAction_OnChangedFloorStarted;
         }
 
         if (TryGetComponent<ShootAction>(out ShootAction shootAction))
@@ -82,6 +83,21 @@ public class UnitAnimator : MonoBehaviour
         Vector3 targetUnitShootAtPosotion = e.targetUnit.GetWorldPosition();
         targetUnitShootAtPosotion.y = _shootPointTranform.position.y;//quickfix to not shoot enemy units on their feets
         bulletProjectile.Setup(targetUnitShootAtPosotion);
+    }
+
+    
+    private void MoveAction_OnChangedFloorStarted(object sender, MoveAction.OnChangeFloorStartedEventArgs e)
+    {
+        if (e.targetGridPosition.floor > e.unitGridPosition.floor)
+        {
+            //jump
+            _animator.SetTrigger("JumpUp");
+        }
+        else
+        {
+            //Drop
+            _animator.SetTrigger("JumpDown");   
+        }
     }
 
     private void EquipSword()
