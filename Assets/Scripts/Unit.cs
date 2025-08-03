@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public static EventHandler OnAnyActionPointsChanged;
     public static EventHandler OnAnyUnitSpawned;
     public static EventHandler OnAnyUnitDead;
-    private const int MAX_ACTION_POINTS = 9; //TODO: a setting for this
+    private const int MAX_ACTION_POINTS = 3; //TODO: a setting for this
     [SerializeField] private bool _isEnemy;
     HealthSystem _healthSystem;
     GridPosition _gridPosition;

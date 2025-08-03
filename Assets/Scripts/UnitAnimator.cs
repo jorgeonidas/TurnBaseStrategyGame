@@ -81,7 +81,8 @@ public class UnitAnimator : MonoBehaviour
         Transform bulletProjectileTransfor = Instantiate(_bulletProjectilePrefab, _shootPointTranform.position, Quaternion.identity);
         BulletProjectile bulletProjectile = bulletProjectileTransfor.GetComponent<BulletProjectile>();
         Vector3 targetUnitShootAtPosotion = e.targetUnit.GetWorldPosition();
-        targetUnitShootAtPosotion.y = _shootPointTranform.position.y;//quickfix to not shoot enemy units on their feets
+        float shoulderOffset = 1.7f;//TODO: somekind of shoot at position
+        targetUnitShootAtPosotion.y += shoulderOffset;//quickfix to not shoot enemy units on their feets
         bulletProjectile.Setup(targetUnitShootAtPosotion);
     }
 
